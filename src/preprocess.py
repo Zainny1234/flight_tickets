@@ -34,7 +34,7 @@ class BookingClass(BaseEstimator, TransformerMixin):
 
 if __name__ == "__main__":
     x = load_dataset('train.xlsx')
-    ms = load_dataset('ms.json')
+    ms = load_dataset('ms.json')['market']
     bk_class = load_dataset('class.json')['class']
 
     y = MarketShare(x).transform(ms)

@@ -1,0 +1,16 @@
+{
+  "market" : {
+    "IndiGo": 41.3,
+    "GoAir": 8.4,
+    "Vistara": 3.3,
+    "Vistara Premium economy": 3.3,
+    "Air Asia": 3.3,
+    "Trujet": 0.1,
+    "Jet Airways": 17.8,
+    "SpiceJet": 13.3,
+    "Jet Airways Business": 17.8,
+    "Air India": 13.5,
+    "Multiple carriers": 1,
+    "Multiple carriers Premium economy": 1
+  }
+}

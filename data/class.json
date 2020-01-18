@@ -1,0 +1,16 @@
+{
+  "class": {
+    "IndiGo": "Economy",
+    "GoAir": "Economy",
+    "Vistara": "Economy",
+    "Vistara Premium economy": "Premium Economy",
+    "Air Asia": "Economy",
+    "Trujet": "Economy",
+    "Jet Airways": "Economy",
+    "SpiceJet": "Economy",
+    "Jet Airways Business": "Business",
+    "Air India": "Economy",
+    "Multiple carriers": "Economy",
+    "Multiple carriers Premium economy": "Premium Economy"
+  }
+}

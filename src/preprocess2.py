@@ -19,6 +19,7 @@ class BaseFeat(BaseEstimator, TransformerMixin):
         X = daystodep(X)
         X = timeofday(X)
         X = totalstops(X)
+        X = duration(X)
         return X
 
 
@@ -56,11 +57,11 @@ if __name__ == "__main__":
     ms = load_dataset('ms.json')['market']
     bk_class = load_dataset('class.json')['class']
     # df = BaseFeat(ms, bk_class).transform(x)
-    # df = LogTransformer(['Price']).transform(df)
+    # df = LogTransformer(['Price', 'Duration']).transform(df)
 
     Feat = [
         ('Base Features', BaseFeat(ms, bk_class)),
-        ('Shirt Sizing', LogTransformer(['Price'])),
+        ('Log Transform', LogTransformer(['Price', 'Duration'])),
     ]
 
     pipe_feat = Pipeline(Feat)

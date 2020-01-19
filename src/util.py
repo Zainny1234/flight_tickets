@@ -51,18 +51,20 @@ def totalstops(df):
     df['Total_Stops'] = df['Total_Stops'].astype(float)
     return df
 
-# def duration(df):
-#     df['Hours'] = df['Duration'].str.split(' ').str[0]
-#     df['Hours'] = df['Hours'].str.replace('h', '')
-#     df['Hours'].fillna(0, inplace=True)
-#
-#     df['Minutes'] = df['Duration'].str.split(' ').str[1]
-#     df['Minutes'] = df['Minutes'].str.replace('m', '').astype(float)
-#     df['Minutes'].fillna(0, inplace=True)
-#
-#     df['Hours'] = df['Hours'] * 60
-#     df['Duration'] = df['Hours'] + df['Minutes']
-#     return df
+
+def duration(df):
+    df['Hours'] = df['Duration'].str.split(' ').str[0]
+    df['Hours'] = df['Hours'].str.replace('h', '').str.replace('m', '').astype(float)
+    df['Hours'].fillna(0, inplace=True)
+
+    df['Minutes'] = df['Duration'].str.split(' ').str[1]
+    df['Minutes'] = df['Minutes'].str.replace('m', '').astype(float)
+    df['Minutes'].fillna(0, inplace=True)
+
+    df['Hours'] = df['Hours'] * 60
+    df['Duration'] = df['Hours'] + df['Minutes']
+    return df
+
 
 if __name__ == "__main__":
     x = load_dataset('train.xlsx')

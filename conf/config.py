@@ -16,3 +16,4 @@ TESTING_DATA_FILE = 'test.xlsx'
 TRAINING_DATA_FILE = 'train.xlsx'
 TARGET = 'SalePrice'
 
+DAY_OF_BOOKING = '1/3/2019'

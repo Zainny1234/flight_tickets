@@ -18,7 +18,7 @@ def load_dataset(file_name: str):
     elif file_type == '.json':
         data = json.loads(open(f'{DATASET_DIR}\{file_name}').read())
     else:
-        print(f'{file_type} is not supported')
+        raise Exception(f'{file_type} is not supported')
     return data
 
 

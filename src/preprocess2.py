@@ -81,8 +81,8 @@ if __name__ == "__main__":
 
     Feat = [
         ('Base Features', BaseFeat(ms, bk_class)),
-        ('Log Transform', LogTransformer(['Price', 'Duration'])),
-        ('Vectoriser', CustomVectoriser(['Route']))
+        ('Log Transform', LogTransformer(['Price', 'Duration']))#,
+        #('Vectoriser', CustomVectoriser(['Route']))
     ]
 
     pipe_feat = Pipeline(Feat)

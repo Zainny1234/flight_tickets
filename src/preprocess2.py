@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import FeatureUnion, Pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class BaseFeat(BaseEstimator, TransformerMixin):
@@ -36,7 +37,7 @@ class LogTransformer(BaseEstimator, TransformerMixin):
         # to accomodate the pipeline
         return self
 
-    def transform(self, X, y= None):
+    def transform(self, X, y=None):
         X = X.copy()
 
         # check that the values are non-negative for log transform
@@ -52,6 +53,25 @@ class LogTransformer(BaseEstimator, TransformerMixin):
         return X
 
 
+class CustomVectoriser(BaseEstimator, TransformerMixin):
+    def __init__(self, variable):
+        self.variable = variable
+        #self.tf = None
+
+    def fit(self, X, y=None):
+        # tf = TfidfVectorizer(ngram_range=(1, 1), lowercase=False)
+        tf = TfidfVectorizer(ngram_range=(1, 1), lowercase=False)
+        self.tf = tf.fit(X[self.variable])
+        return self
+
+    def transform(self, X, y=None):
+        train_route = self.tf.transform(X[self.variable])
+        train_route = pd.DataFrame(data=train_route.toarray(), columns=train_route.get_feature_names())
+        X = pd.concat([X, train_route], axis=1)
+        X.drop('Route', axis=1, inplace=True)
+        return X
+
+
 if __name__ == "__main__":
     x = load_dataset('train.xlsx')
     ms = load_dataset('ms.json')['market']
@@ -62,7 +82,10 @@ if __name__ == "__main__":
     Feat = [
         ('Base Features', BaseFeat(ms, bk_class)),
         ('Log Transform', LogTransformer(['Price', 'Duration'])),
+        ('Vectoriser', CustomVectoriser(['Route']))
     ]
 
     pipe_feat = Pipeline(Feat)
     df = pipe_feat.transform(x)
+
+

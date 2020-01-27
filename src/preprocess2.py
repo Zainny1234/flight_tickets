@@ -56,12 +56,12 @@ class LogTransformer(BaseEstimator, TransformerMixin):
 class CustomVectoriser(BaseEstimator, TransformerMixin):
     def __init__(self, variable):
         self.variable = variable
-        #self.tf = None
+        self.tf = None
 
     def fit(self, X, y=None):
         # tf = TfidfVectorizer(ngram_range=(1, 1), lowercase=False)
-        tf = TfidfVectorizer(ngram_range=(1, 1), lowercase=False)
-        self.tf = tf.fit(X[self.variable])
+        self.tf = TfidfVectorizer(ngram_range=(1, 1), lowercase=False)
+        self.out = self.tf.fit(X[self.variable])
         return self
 
     def transform(self, X, y=None):
@@ -78,6 +78,13 @@ if __name__ == "__main__":
     bk_class = load_dataset('class.json')['class']
     # df = BaseFeat(ms, bk_class).transform(x)
     # df = LogTransformer(['Price', 'Duration']).transform(df)
+    def clean_route(route):
+        route = str(route)
+        route = route.split(' → ')
+        return ' '.join(route)
+
+
+    x['Route'] = x['Route'].apply(clean_route)
 
     Feat = [
         ('Base Features', BaseFeat(ms, bk_class)),

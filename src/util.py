@@ -66,6 +66,12 @@ def duration(df):
     return df
 
 
+def clean_route(route):
+    route = str(route)
+    route = route.split(' → ')
+    return ' '.join(route)
+
+
 if __name__ == "__main__":
     x = load_dataset('train.xlsx')
     ms = load_dataset('ms.json')['market']

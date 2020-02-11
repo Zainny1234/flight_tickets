@@ -52,7 +52,7 @@ def totalstops(df):
     return df
 
 
-def duration(df):
+def X(df):
     df['Hours'] = df['Duration'].str.split(' ').str[0]
     df['Hours'] = df['Hours'].str.replace('h', '').str.replace('m', '').astype(float)
     df['Hours'].fillna(0, inplace=True)
@@ -81,4 +81,4 @@ if __name__ == "__main__":
     df = daystodep(df)
     df = timeofday(df)
     df = totalstops(df)
-    df = duration(df)
+    df = X(df)

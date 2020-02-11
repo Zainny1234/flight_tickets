@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
+from src.data_ingest import load_dataset
 
 
 class BaseFeat(BaseEstimator, TransformerMixin):
@@ -20,7 +21,7 @@ class BaseFeat(BaseEstimator, TransformerMixin):
         X = daystodep(X)
         X = timeofday(X)
         X = totalstops(X)
-        X = duration(X)
+        X = X(X)
         return X
 
 
@@ -76,8 +77,10 @@ if __name__ == "__main__":
     x = load_dataset('train.xlsx')
     ms = load_dataset('ms.json')['market']
     bk_class = load_dataset('class.json')['class']
+
+
     # df = BaseFeat(ms, bk_class).transform(x)
-    # df = LogTransformer(['Price', 'Duration']).transform(df)
+    # df = LogTransformer(['Duration']).transform(df)
     def clean_route(route):
         route = str(route)
         route = route.split(' → ')
@@ -88,11 +91,9 @@ if __name__ == "__main__":
 
     Feat = [
         ('Base Features', BaseFeat(ms, bk_class)),
-        ('Log Transform', LogTransformer(['Price', 'Duration']))#,
-        #('Vectoriser', CustomVectoriser(['Route']))
+        ('Log Transform', LogTransformer(['Price', 'Duration'])) ,
+        ('Vectoriser', CustomVectoriser(['Route']))
     ]
 
     pipe_feat = Pipeline(Feat)
     df = pipe_feat.transform(x)
-
-

@@ -32,7 +32,7 @@ class PreProcess:
         else:
             #load tf fomr json(write code for it)
             tf = joblib.load(os.path.join(os.getcwd(), 'models', 'tf.sav'))
-            route = tf.fit_transform(self.x['Route'])
+            route = tf.transform(self.x['Route'])
 
         route = pd.DataFrame(data=route.toarray(), columns=tf.get_feature_names())
         self.x = pd.concat([self.x, route], axis=1)
@@ -45,8 +45,8 @@ class PreProcess:
 
     def preprocess(self, ms, bk_class,  cat_cols, training = True):
         self.x = self.basefeat(ms, bk_class)
-        self.x = self.vectoriser(training)
         self.x = self.create_dummies(cat_cols)
+        self.x = self.vectoriser(training)
         return self.x
 
 
@@ -59,7 +59,8 @@ if __name__ == "__main__":
     bk_class = load_dataset('class.json')['class']
 
     p = PreProcess(x)
-    data = p.preprocess(ms, bk_class, cat_cols, training = False)
+    data1 = p.basefeat(ms, bk_class)
+    #data = p.preprocess(ms, bk_class, cat_cols, training = False)
 
 
 

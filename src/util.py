@@ -63,6 +63,7 @@ def X(df):
 
     df['Hours'] = df['Hours'] * 60
     df['Duration'] = df['Hours'] + df['Minutes']
+    df.drop(['Hours', 'Minutes'], axis=1)
     return df
 
 

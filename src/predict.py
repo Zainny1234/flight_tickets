@@ -19,6 +19,7 @@ if __name__ == "__main__":
     from src.data_ingest import load_dataset
     from conf.config import CATEGORICAL_COLUMNS as cat_cols
     x = load_dataset('test.xlsx')
+    x.columns = x.columns.str.replace(":", "_")
     ms = load_dataset('ms.json')['market']
     bk_class = load_dataset('class.json')['class']
 

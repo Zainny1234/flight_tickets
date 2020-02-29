@@ -40,7 +40,7 @@ class PreProcess:
         return self.x
 
     def create_dummies(self, cat_cols):
-        self.x = pd.get_dummies(self.x, cat_cols)
+        self.x = pd.get_dummies(self.x, columns=cat_cols, drop_first=True)
         return self.x
 
     def preprocess(self, ms, bk_class,  cat_cols, training = True):
@@ -59,8 +59,10 @@ if __name__ == "__main__":
     bk_class = load_dataset('class.json')['class']
 
     p = PreProcess(x)
-    data1 = p.basefeat(ms, bk_class)
-    #data = p.preprocess(ms, bk_class, cat_cols, training = False)
+    #data1 = p.basefeat(ms, bk_class)
+    data = p.preprocess(ms, bk_class, cat_cols, training = False)
+    dat_cols = data.columns
+    joblib.dump(dat_cols, os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
 
 
 

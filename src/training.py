@@ -2,7 +2,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from src.data_ingest import ml_params
-from src.vectorizertemp import train_df, test_df
+from src.final_preprocess import PreProcess
 import pandas as pd
 import lightgbm as lgb
 import xgboost as xgb
@@ -63,19 +63,26 @@ def models_training(X_train, X_test, y_train, y_test):
     joblib.dump(best_lgbm_es, os.path.join(os.getcwd(), 'models', 'lgbm_es.sav'))
     joblib.dump(best_xgbt_es, os.path.join(os.getcwd(), 'models', 'xgbt_es.sav'))
 
-    score_dict ={ 'RF': best_rf_score,
+    score_dict = {'RF': best_rf_score,
                   'LightGBM': best_lgbm_score,
                   'Xgboost': best_xgbt_score}
     return score_dict
 
 
-
-
-
 if __name__ == '__main__':
-    train_df.columns = train_df.columns.str.replace(":", "_")
-    y = train_df['Price'].values
-    x = train_df.drop(labels=['Price'], axis=1)
+    from src.data_ingest import load_dataset
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from conf.config import CATEGORICAL_COLUMNS as cat_cols
+
+    x = load_dataset('train.xlsx')
+    ms = load_dataset('ms.json')['market']
+    bk_class = load_dataset('class.json')['class']
+
+    p = PreProcess(x)
+    data = p.preprocess(ms, bk_class, cat_cols, training=False)
+    data.columns = data.columns.str.replace(":", "_")
+    y = data['Price'].values
+    x = data.drop(labels=['Price'], axis=1)
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.20, random_state=1)
     scores = models_training(X_train, X_test, y_train, y_test)
     # model, pred = algorithm_pipeline(X_train, X_test, y_train, y_test, model=xgb.XGBRegressor(),

@@ -43,11 +43,17 @@ class PreProcess:
         self.x = pd.get_dummies(self.x, columns=cat_cols, drop_first=True)
         return self.x
 
+    def column_rename(self):
+        self.x.columns = self.x.columns.str.replace(":", "_")
+        return self.x
+
     def preprocess(self, ms, bk_class,  cat_cols, training = True):
         self.x = self.basefeat(ms, bk_class)
         self.x = self.create_dummies(cat_cols)
         self.x = self.vectoriser(training)
-        if training == False:
+        self.x = self.column_rename()
+
+        if not training:
             test_cols = self.x.columns
             dat_cols = joblib.load(os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
             add_cols = list(set(dat_cols) - set(test_cols))

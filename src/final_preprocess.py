@@ -47,6 +47,13 @@ class PreProcess:
         self.x = self.basefeat(ms, bk_class)
         self.x = self.create_dummies(cat_cols)
         self.x = self.vectoriser(training)
+        if training == False:
+            test_cols = self.x.columns
+            dat_cols = joblib.load(os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
+            add_cols = list(set(dat_cols) - set(test_cols))
+            df_new = pd.DataFrame(0, index=range(4), columns=add_cols)
+            self.x = pd.concat([self.x, df_new], axis=1)
+
         return self.x
 
 
@@ -54,15 +61,15 @@ if __name__ == "__main__":
     from src.data_ingest import load_dataset
     from sklearn.feature_extraction.text import TfidfVectorizer
     from conf.config import  CATEGORICAL_COLUMNS as cat_cols
-    x = load_dataset('train.xlsx')
+    x = load_dataset('test.xlsx')
     ms = load_dataset('ms.json')['market']
     bk_class = load_dataset('class.json')['class']
 
     p = PreProcess(x)
     #data1 = p.basefeat(ms, bk_class)
     data = p.preprocess(ms, bk_class, cat_cols, training = False)
-    dat_cols = data.columns
-    joblib.dump(dat_cols, os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
+    # dat_cols = data.columns
+    # joblib.dump(dat_cols, os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
 
 
 

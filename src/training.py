@@ -73,17 +73,28 @@ if __name__ == '__main__':
     from src.data_ingest import load_dataset
     from sklearn.feature_extraction.text import TfidfVectorizer
     from conf.config import CATEGORICAL_COLUMNS as cat_cols
+    import pandas as pd
 
     x = load_dataset('train.xlsx')
+    y_dat = x['Price'].values
+    x.drop(['Price'], axis=1, inplace=True)
+    y = load_dataset('test.xlsx')
     ms = load_dataset('ms.json')['market']
     bk_class = load_dataset('class.json')['class']
 
-    p = PreProcess(x)
-    data = p.preprocess(ms, bk_class, cat_cols, training=False)
+    x['label'] = 0
+    y['label'] = 1
+    data_in = pd.concat([x, y], axis=0).reset_index(drop=True)
+
+    p = PreProcess(data_in)
+    # data1 = p.basefeat(ms, bk_class)
+    data = p.preprocess(ms, bk_class, cat_cols, training=True)
+
     data.columns = data.columns.str.replace(":", "_")
-    y = data['Price'].values
-    x = data.drop(labels=['Price'], axis=1)
-    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.20, random_state=1)
+
+    x_dat = data.loc[data['label'] == 0]
+
+    X_train, X_test, y_train, y_test = train_test_split(x_dat, y_dat, test_size=0.20, random_state=1)
     scores = models_training(X_train, X_test, y_train, y_test)
     # model, pred = algorithm_pipeline(X_train, X_test, y_train, y_test, model=xgb.XGBRegressor(),
     #                                  param_grid=xgbt, cv=2, scoring_fit='r2')

@@ -9,7 +9,7 @@ class Predict(PreProcess):
         #self.x = x
 
     def predict(self, ms, bk_class, cat_cols):
-        self.x = self.preprocess(ms, bk_class, cat_cols)
+        self.x = self.preprocess(ms, bk_class, cat_cols, False)
         model = joblib.load(os.path.join(os.getcwd(), 'models', 'lgbm_es.sav'))
         self.x['Price'] = model.predict(self.x)
         return self.x

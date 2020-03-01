@@ -51,7 +51,7 @@ class PreProcess:
             test_cols = self.x.columns
             dat_cols = joblib.load(os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
             add_cols = list(set(dat_cols) - set(test_cols))
-            df_new = pd.DataFrame(0, index=range(4), columns=add_cols)
+            df_new = pd.DataFrame(0, index = range(len(self.x)), columns=add_cols)
             self.x = pd.concat([self.x, df_new], axis=1)
 
         return self.x
@@ -61,15 +61,21 @@ if __name__ == "__main__":
     from src.data_ingest import load_dataset
     from sklearn.feature_extraction.text import TfidfVectorizer
     from conf.config import  CATEGORICAL_COLUMNS as cat_cols
-    x = load_dataset('test.xlsx')
+    import pandas as pd
+    x = load_dataset('train.xlsx')
+    x.drop(['Price'],axis=1,  inplace = True)
+    y = load_dataset('test.xlsx')
+    x['label'] = 0
+    y['label'] = 1
+    data_in = pd.concat([x, y], axis=0).reset_index(drop=True)
     ms = load_dataset('ms.json')['market']
     bk_class = load_dataset('class.json')['class']
 
-    p = PreProcess(x)
+    p = PreProcess(data_in)
     #data1 = p.basefeat(ms, bk_class)
-    data = p.preprocess(ms, bk_class, cat_cols, training = False)
-    # dat_cols = data.columns
-    # joblib.dump(dat_cols, os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
+    data = p.preprocess(ms, bk_class, cat_cols, training=True)
+    dat_cols = data.columns
+    joblib.dump(dat_cols, os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
 
 
 

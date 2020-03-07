@@ -52,11 +52,18 @@ class PreProcess:
         self.x = self.create_dummies(cat_cols)
         self.x = self.vectoriser(training)
         self.x = self.column_rename()
+        #self.x.columns = self.x.columns.str.replace(":", "_")
+        print(self.x.columns)
+        print(self.x.columns)
 
         if not training:
             test_cols = self.x.columns
+            print(test_cols)
+            print(len(test_cols))
             dat_cols = joblib.load(os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
-            add_cols = list(set(dat_cols) - set(test_cols))
+            add_cols = [x for x in dat_cols if x not in test_cols]
+            #add_cols = list(set(dat_cols) - set(test_cols))
+            print(add_cols)
             df_new = pd.DataFrame(0, index = range(len(self.x)), columns=add_cols)
             self.x = pd.concat([self.x, df_new], axis=1)
 
@@ -71,8 +78,8 @@ if __name__ == "__main__":
     x = load_dataset('train.xlsx')
     x.drop(['Price'],axis=1,  inplace = True)
     y = load_dataset('test.xlsx')
-    x['label'] = 0
-    y['label'] = 1
+    #x['label'] = 0
+    #y['label'] = 1
     data_in = pd.concat([x, y], axis=0).reset_index(drop=True)
     ms = load_dataset('ms.json')['market']
     bk_class = load_dataset('class.json')['class']
@@ -81,7 +88,7 @@ if __name__ == "__main__":
     #data1 = p.basefeat(ms, bk_class)
     data = p.preprocess(ms, bk_class, cat_cols, training=True)
     dat_cols = data.columns
-    joblib.dump(dat_cols, os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
+    #joblib.dump(dat_cols, os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
 
 
 

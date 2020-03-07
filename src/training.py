@@ -93,6 +93,7 @@ if __name__ == '__main__':
     data.columns = data.columns.str.replace(":", "_")
 
     x_dat = data.loc[data['label'] == 0]
+    x_dat = x_dat.drop('label', 1)
 
     X_train, X_test, y_train, y_test = train_test_split(x_dat, y_dat, test_size=0.20, random_state=1)
     scores = models_training(X_train, X_test, y_train, y_test)

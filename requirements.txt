@@ -1,3 +1,5 @@
+requests
+flask
 numpy==1.18.1
 pandas==0.25.3
 pathlib==1.0.1

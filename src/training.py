@@ -33,6 +33,13 @@ def algorithm_pipeline(X_train, X_test, y_train, y_test,
 
 def models_training(X_train, X_test, y_train, y_test):
     ## Training random forest
+
+    try:
+        assert len(X_train.columns) == 572
+    except AssertionError as err:
+        print('number of columns should be 572')
+        raise
+
     rf = ml_params['random forest']['estimators']
     model_rf, pred_rf = algorithm_pipeline(X_train, X_test, y_train, y_test, model=RandomForestRegressor(),
                                            param_grid=rf, cv=5, scoring_fit='r2')

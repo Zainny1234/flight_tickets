@@ -1,15 +1,21 @@
+import logging
+
 from conf.config import DAY_OF_BOOKING
 import pandas as pd
 from src.data_ingest import load_dataset
+logger = logging.getLogger(__name__)
 
 
 def marketshare(df, ms):
     if not isinstance(df, pd.DataFrame):
+        logger.error(TypeError)
         raise TypeError('Input must be pandas dataframe')
 
     if not isinstance(ms, dict):
+        logger.error(TypeError)
         raise TypeError('Input must be a dictionary')
     df['Market_Share'] = df['Airline'].map(ms)
+    logger.info('Calculated market share')
     return df
 
 
@@ -20,6 +26,7 @@ def classshare(df, bk_class):
     if not isinstance(bk_class, dict):
         raise TypeError('Input must be a dictionary')
     df['Booking_Class'] = df['Airline'].map(bk_class)
+    logger.info('Calculated class share')
     return df
 
 
@@ -32,6 +39,7 @@ def daystodep(df, dayofbk=DAY_OF_BOOKING):
     df1['Date_of_Journey'] = pd.to_datetime(df1['Date_of_Journey'], format='%d/%m/%Y')
     df1['Days_to_Departure'] = (df1['Date_of_Journey'] - df1['Day_of_Booking']).dt.days
     df['Days_to_Departure'] = df1['Days_to_Departure']
+    logger.info('calculated days to departure')
     return df
 
 
@@ -49,6 +57,7 @@ def get_departure(dep):
             return 'Night'
     except ValueError as err:
         print('time must be in the format hr:min')
+        logger.info("File not found", exc_info=True)
         raise
 
 
@@ -58,6 +67,7 @@ def timeofday(df):
     df['Arrival_Time'] = df['Arrival_Time'].str.split(' ').str[0]
     df['Dep_timeofday'] = df['Dep_Time'].apply(get_departure)
     df['Arr_timeofday'] = df['Arrival_Time'].apply(get_departure)
+    logger.info('Calculated time of the day')
     return df
 
 
@@ -69,6 +79,7 @@ def totalstops(df):
     df['Total_Stops'] = df['Total_Stops'].str.replace('stop', '')
     df['Total_Stops'].fillna(0, inplace=True)
     df['Total_Stops'] = df['Total_Stops'].astype(float)
+    logger.info('calculated total stops')
     return df
 
 
@@ -86,6 +97,7 @@ def X(df):
     df['Hours'] = df['Hours'] * 60
     df['Duration'] = df['Hours'] + df['Minutes']
     df.drop(['Hours', 'Minutes'], axis=1, inplace=True)
+    logger.info('calculated duration of journey')
     return df
 
 

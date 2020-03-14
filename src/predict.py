@@ -21,7 +21,7 @@ class Predict(PreProcess):
             raise
         self.x['Price'] = model.predict(self.x)
         logging.info('Prediction done')
-        return self.x
+        return self.x['Price']
 
 
 if __name__ == "__main__":

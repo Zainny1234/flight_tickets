@@ -17,13 +17,16 @@ def index():
 
 @app.route('/predict_api', methods=['POST'])
 def predict_api():
+    print('comes here')
     data = request.get_json(force=True)
-    data = pd.DataFrame([data])
-    print(data)
-    p = Predict(data)
-    price = p.predict(ms, bk_class, cat_cols)
-    return jsonify(price)
+    #data = request.json
+    # print(data)
+    # data = pd.DataFrame([data])
+    # print(data)
+    # p = Predict(data)
+    # price = p.predict(ms, bk_class, cat_cols)
+    return jsonify(data)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

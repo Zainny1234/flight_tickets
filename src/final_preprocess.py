@@ -59,12 +59,12 @@ class PreProcess:
 
         if not training:
             test_cols = self.x.columns
-            print(test_cols)
-            print(len(test_cols))
+            #print(test_cols)
+            #print(len(test_cols))
             dat_cols = joblib.load(os.path.join(os.getcwd(), 'models', 'dat_cols.sav'))
             add_cols = [x for x in dat_cols if x not in test_cols]
             # add_cols = list(set(dat_cols) - set(test_cols))
-            print(add_cols)
+            #print(add_cols)
             df_new = pd.DataFrame(0, index=range(len(self.x)), columns=add_cols)
             self.x = pd.concat([self.x, df_new], axis=1)
         logger.info('Data preprocessing completed')

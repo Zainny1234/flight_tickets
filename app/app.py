@@ -21,11 +21,11 @@ def predict_api():
     data = request.get_json(force=True)
     #data = request.json
     # print(data)
-    # data = pd.DataFrame([data])
+    data = pd.DataFrame([data])
     # print(data)
-    # p = Predict(data)
-    # price = p.predict(ms, bk_class, cat_cols)
-    return jsonify(data)
+    p = Predict(data)
+    price = p.predict(ms, bk_class, cat_cols)
+    return {"price": price.to_list()}
 
 
 if __name__ == '__main__':

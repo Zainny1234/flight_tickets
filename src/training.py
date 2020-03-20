@@ -8,6 +8,8 @@ import lightgbm as lgb
 import xgboost as xgb
 import joblib
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 
 def algorithm_pipeline(X_train, X_test, y_train, y_test,
@@ -32,29 +34,44 @@ def algorithm_pipeline(X_train, X_test, y_train, y_test,
 
 
 def models_training(X_train, X_test, y_train, y_test):
+
+
+    try:
+        assert len(X_train.columns) == 572
+    except AssertionError as err:
+        print('number of columns should be 572')
+        logger.info("File not found", exc_info=True)
+        raise
+
     ## Training random forest
+    logger.info('Starting Random Forest')
     rf = ml_params['random forest']['estimators']
     model_rf, pred_rf = algorithm_pipeline(X_train, X_test, y_train, y_test, model=RandomForestRegressor(),
                                            param_grid=rf, cv=5, scoring_fit='r2')
     best_rf_score = model_rf.best_score_
     best_rf_es = model_rf.best_estimator_
     df_score_rf = pd.DataFrame(model_rf.cv_results_).sort_values('rank_test_score')
+    logger.info('Random forest model done')
 
     ## Training Light GBM
+    logger.info('Starting Light GBM')
     lgbm = ml_params['lightGBM']['estimators']
     model_lgbm, pred_lgbm = algorithm_pipeline(X_train, X_test, y_train, y_test, model=lgb.LGBMRegressor(),
                                                param_grid=lgbm, cv=5, scoring_fit='r2')
     best_lgbm_score = model_lgbm.best_score_
     best_lgbm_es = model_lgbm.best_estimator_
     df_score_lgbm = pd.DataFrame(model_lgbm.cv_results_).sort_values('rank_test_score')
+    logger.info('GBM model done')
 
     ##Training xgboost
+    logger.info('Starting XGBOOST')
     xgbt = ml_params['xgboost']['estimators']
     model_xgbt, pred_xgbt = algorithm_pipeline(X_train, X_test, y_train, y_test, model=xgb.XGBRegressor(),
                                                param_grid=xgbt, cv=5, scoring_fit='r2')
     best_xgbt_score = model_xgbt.best_score_
     best_xgbt_es = model_xgbt.best_estimator_
     df_score_xgbt = pd.DataFrame(model_xgbt.cv_results_).sort_values('rank_test_score')
+    logger.info('XGBOOST model done')
 
     if not os.path.exists('models'):
         os.mkdir('models')

@@ -2,7 +2,7 @@ import pandas as pd
 import logging
 import json
 import os
-from conf.config import DATASET_DIR
+from flight_tickets.conf.config import DATASET_DIR
 
 logging.basicConfig(filename='test.log', level=logging.DEBUG,
                     format='%(asctime)s:%(funcName)s:%(lineno)d:%(module)s:%(message)s',

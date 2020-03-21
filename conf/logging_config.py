@@ -4,7 +4,7 @@ import os
 import sys
 
 from flight_tickets.conf import config
-import config
+
 # Multiple calls to logging.getLogger('someLogger') return a
 # reference to the same logger object.  This is true not only
 # within the same module, but also across modules as long as

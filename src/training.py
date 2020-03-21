@@ -1,14 +1,15 @@
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
-from src.data_ingest import ml_params
-from src.final_preprocess import PreProcess
+from flight_tickets.src.data_ingest import ml_params
+from flight_tickets.src.final_preprocess import PreProcess
 import pandas as pd
 import lightgbm as lgb
 import xgboost as xgb
 import joblib
 import os
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -34,8 +35,6 @@ def algorithm_pipeline(X_train, X_test, y_train, y_test,
 
 
 def models_training(X_train, X_test, y_train, y_test):
-
-
     try:
         assert len(X_train.columns) == 572
     except AssertionError as err:
@@ -43,7 +42,7 @@ def models_training(X_train, X_test, y_train, y_test):
         logger.info("File not found", exc_info=True)
         raise
 
-    ## Training random forest
+    # Training random forest
     logger.info('Starting Random Forest')
     rf = ml_params['random forest']['estimators']
     model_rf, pred_rf = algorithm_pipeline(X_train, X_test, y_train, y_test, model=RandomForestRegressor(),
@@ -53,7 +52,7 @@ def models_training(X_train, X_test, y_train, y_test):
     df_score_rf = pd.DataFrame(model_rf.cv_results_).sort_values('rank_test_score')
     logger.info('Random forest model done')
 
-    ## Training Light GBM
+    # Training Light GBM
     logger.info('Starting Light GBM')
     lgbm = ml_params['lightGBM']['estimators']
     model_lgbm, pred_lgbm = algorithm_pipeline(X_train, X_test, y_train, y_test, model=lgb.LGBMRegressor(),
@@ -63,7 +62,7 @@ def models_training(X_train, X_test, y_train, y_test):
     df_score_lgbm = pd.DataFrame(model_lgbm.cv_results_).sort_values('rank_test_score')
     logger.info('GBM model done')
 
-    ##Training xgboost
+    #Training xgboost
     logger.info('Starting XGBOOST')
     xgbt = ml_params['xgboost']['estimators']
     model_xgbt, pred_xgbt = algorithm_pipeline(X_train, X_test, y_train, y_test, model=xgb.XGBRegressor(),
@@ -75,6 +74,7 @@ def models_training(X_train, X_test, y_train, y_test):
 
     if not os.path.exists('models'):
         os.mkdir('models')
+        print('new model folder created')
 
     joblib.dump(best_rf_es, os.path.join(os.getcwd(), 'models', 'rf_es.sav'))
     joblib.dump(best_lgbm_es, os.path.join(os.getcwd(), 'models', 'lgbm_es.sav'))
@@ -87,9 +87,9 @@ def models_training(X_train, X_test, y_train, y_test):
 
 
 if __name__ == '__main__':
-    from src.data_ingest import load_dataset
+    from flight_tickets.src.data_ingest import load_dataset
     from sklearn.feature_extraction.text import TfidfVectorizer
-    from conf.config import CATEGORICAL_COLUMNS as cat_cols
+    from flight_tickets.conf.config import CATEGORICAL_COLUMNS as cat_cols
     import pandas as pd
 
     x = load_dataset('train.xlsx')

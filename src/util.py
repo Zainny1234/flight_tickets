@@ -1,8 +1,8 @@
 import logging
 
-from conf.config import DAY_OF_BOOKING
+from flight_tickets.conf.config import DAY_OF_BOOKING
 import pandas as pd
-from src.data_ingest import load_dataset
+from flight_tickets.src.data_ingest import load_dataset
 logger = logging.getLogger(__name__)
 
 

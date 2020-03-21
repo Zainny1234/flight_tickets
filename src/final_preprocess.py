@@ -7,9 +7,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 import os
 import joblib
-from src.data_ingest import load_dataset
-from conf.config import DAY_OF_BOOKING, CATEGORICAL_COLUMNS
-from src.util import *
+from flight_tickets.src.data_ingest import load_dataset
+from flight_tickets.conf.config import DAY_OF_BOOKING, CATEGORICAL_COLUMNS
+from flight_tickets.src.util import *
 
 logger = logging.getLogger(__name__)
 
@@ -72,9 +72,9 @@ class PreProcess:
 
 
 if __name__ == "__main__":
-    from src.data_ingest import load_dataset
+    from flight_tickets.src.data_ingest import load_dataset
     from sklearn.feature_extraction.text import TfidfVectorizer
-    from conf.config import CATEGORICAL_COLUMNS as cat_cols
+    from flight_tickets.conf.config import CATEGORICAL_COLUMNS as cat_cols
     import pandas as pd
 
     x = load_dataset('train.xlsx')

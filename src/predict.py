@@ -1,4 +1,4 @@
-from src.final_preprocess import PreProcess
+from flight_tickets.src.final_preprocess import PreProcess
 import joblib
 import os
 import logging
@@ -25,8 +25,8 @@ class Predict(PreProcess):
 
 
 if __name__ == "__main__":
-    from src.data_ingest import load_dataset
-    from conf.config import CATEGORICAL_COLUMNS as cat_cols
+    from flight_tickets.src.data_ingest import load_dataset
+    from flight_tickets.conf.config import CATEGORICAL_COLUMNS as cat_cols
 
     x = load_dataset('test.xlsx')
     # x.columns = x.columns.str.replace(":", "_")

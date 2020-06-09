@@ -10,7 +10,7 @@ class Predict(PreProcess):
     def __init__(self, X):
         super().__init__(X)
         # self.x = x
-
+#just for commit
     def predict(self, ms, bk_class, cat_cols):
         self.x = self.preprocess(ms, bk_class, cat_cols, False)
         try:
